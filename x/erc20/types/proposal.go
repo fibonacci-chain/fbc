@@ -5,7 +5,6 @@ import (
 	"strings"
 
 	"github.com/ethereum/go-ethereum/common"
-
 	sdk "github.com/fibonacci-chain/fbc/libs/cosmos-sdk/types"
 	govtypes "github.com/fibonacci-chain/fbc/x/gov/types"
 )

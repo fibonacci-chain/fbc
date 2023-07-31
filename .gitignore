@@ -61,7 +61,6 @@ unittest
 .vagrant/
 *.box
 *.log
-*.json
 vagrant
 
 # IDE
