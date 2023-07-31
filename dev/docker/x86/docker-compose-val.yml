@@ -1,0 +1,29 @@
+version: "3"
+services:
+  fbc:
+    container_name: fbc
+    image: registry.cn-hongkong.aliyuncs.com/fbc/fullnode-x86:v1.6.8.5
+    #restart: unless-stopped
+    environment:
+      - FBC_LOG_FILE=/root/logs/fbchaind.log
+      - FBC_LOG_STDOUT=false
+      - FBC_DB_BACKEND=goleveldb
+      - FBC_ELAPSED=DeliverTxs=2,Round=1,CommitRound=1,Produce=1
+      - FBC_LOG_LEVEL=main:info,iavl:info,*:error,tx-receiver:info
+      - FBC_NODE_MODE=val #archive, val, rpc
+      - FBC_FAST_QUERY=true
+      - FBC_DEBUG_API=false
+      - FBC_MIN_GAS_PRICE=0.0000001fibo
+      - FBC_ADDR_BOOK_STRICT=false
+      - FBC_UNSAFE_CORS=true
+    volumes:
+      - /home/ubuntu/.fbchaind:/root/.fbchaind
+      - /home/ubuntu/logs:/root/logs
+      - /home/ubuntu/cli:/cli
+    ports:
+      - "26656:26656"
+      - "26657:26657"
+      - "26660:26660"
+      - "8546:8546"
+      - "8545:8545"
+      - "6060:6060"

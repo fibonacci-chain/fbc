@@ -1,0 +1,97 @@
+package gov
+
+import (
+	"testing"
+
+	fbexchaincodec "github.com/fibonacci-chain/fbc/app/codec"
+	interfacetypes "github.com/fibonacci-chain/fbc/libs/cosmos-sdk/codec/types"
+	"github.com/fibonacci-chain/fbc/libs/cosmos-sdk/types/module"
+	ibctransfer "github.com/fibonacci-chain/fbc/libs/ibc-go/modules/apps/transfer"
+	ibc "github.com/fibonacci-chain/fbc/libs/ibc-go/modules/core"
+
+	"github.com/fibonacci-chain/fbc/libs/cosmos-sdk/client/context"
+	cliLcd "github.com/fibonacci-chain/fbc/libs/cosmos-sdk/client/lcd"
+	"github.com/fibonacci-chain/fbc/libs/cosmos-sdk/codec"
+	abci "github.com/fibonacci-chain/fbc/libs/tendermint/abci/types"
+	"github.com/fibonacci-chain/fbc/x/gov/client"
+	"github.com/fibonacci-chain/fbc/x/gov/client/rest"
+	"github.com/fibonacci-chain/fbc/x/gov/keeper"
+	"github.com/fibonacci-chain/fbc/x/gov/types"
+	"github.com/spf13/cobra"
+	"github.com/stretchr/testify/require"
+)
+
+func TestAppModule_BeginBlock(t *testing.T) {
+
+}
+
+func getCmdSubmitProposal(proxy *codec.CodecProxy, reg interfacetypes.InterfaceRegistry) *cobra.Command {
+	return &cobra.Command{}
+}
+
+func proposalRESTHandler(cliCtx context.CLIContext) rest.ProposalRESTHandler {
+	return rest.ProposalRESTHandler{}
+}
+
+func TestNewAppModuleBasic(t *testing.T) {
+	ctx, _, gk, _, crisisKeeper := keeper.CreateTestInput(t, false, 1000)
+
+	moduleBasic := NewAppModuleBasic(client.ProposalHandler{
+		CLIHandler:  getCmdSubmitProposal,
+		RESTHandler: proposalRESTHandler,
+	})
+
+	require.Equal(t, types.ModuleName, moduleBasic.Name())
+
+	cdc := codec.New()
+	ModuleBasics := module.NewBasicManager(
+		ibc.AppModuleBasic{},
+		ibctransfer.AppModuleBasic{},
+	)
+	//cdc := fbexchaincodec.MakeCodec(ModuleBasics)
+	interfaceReg := fbexchaincodec.MakeIBC(ModuleBasics)
+	protoCodec := codec.NewProtoCodec(interfaceReg)
+	codecProxy := codec.NewCodecProxy(protoCodec, cdc)
+
+	moduleBasic.RegisterCodec(cdc)
+	bz, err := cdc.MarshalBinaryBare(types.MsgSubmitProposal{})
+	require.NotNil(t, bz)
+	require.Nil(t, err)
+
+	jsonMsg := moduleBasic.DefaultGenesis()
+	err = moduleBasic.ValidateGenesis(jsonMsg)
+	require.Nil(t, err)
+	err = moduleBasic.ValidateGenesis(jsonMsg[:len(jsonMsg)-1])
+	require.NotNil(t, err)
+
+	rs := cliLcd.NewRestServer(codecProxy, interfaceReg, nil)
+	moduleBasic.RegisterRESTRoutes(rs.CliCtx, rs.Mux)
+
+	// todo: check diff after GetTxCmd
+	moduleBasic.GetTxCmd(cdc)
+
+	// todo: check diff after GetQueryCmd
+	moduleBasic.GetQueryCmd(cdc)
+
+	appModule := NewAppModule(gk, gk.SupplyKeeper())
+	require.Equal(t, types.ModuleName, appModule.Name())
+
+	// todo: check diff after RegisterInvariants
+	appModule.RegisterInvariants(&crisisKeeper)
+
+	require.Equal(t, types.RouterKey, appModule.Route())
+
+	require.IsType(t, NewHandler(gk), appModule.NewHandler())
+
+	require.Equal(t, types.QuerierRoute, appModule.QuerierRoute())
+
+	require.IsType(t, NewQuerier(gk), appModule.NewQuerierHandler())
+
+	require.Equal(t, []abci.ValidatorUpdate{}, appModule.InitGenesis(ctx, jsonMsg))
+
+	require.Equal(t, jsonMsg, appModule.ExportGenesis(ctx))
+
+	appModule.BeginBlock(ctx, abci.RequestBeginBlock{})
+
+	appModule.EndBlock(ctx, abci.RequestEndBlock{})
+}

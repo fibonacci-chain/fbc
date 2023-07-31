@@ -1,0 +1,39 @@
+FROM golang:1.17.2-alpine
+
+RUN apk add --no-cache \
+    make \
+    git \
+    libc-dev \
+    bash \
+    gcc \
+    linux-headers \
+    eudev-dev \
+    g++ \
+    snappy \
+    snappy-dev \
+    lz4 \
+    lz4-dev \
+    perl \
+    curl \
+    cmake \
+    ca-certificates \
+    build-base
+
+RUN git clone https://github.com/facebook/rocksdb.git -b v6.27.3 && \
+    mv rocksdb /tmp/rocksdb && \
+    cd /tmp/rocksdb && \
+    sed -i 's/install -C /install -c /g' Makefile && \
+    make libsnappy.a && cp libsnappy.a /usr/lib && \
+    make liblz4.a && cp liblz4.a /usr/lib && \
+    make -j16 static_lib PREFIX=/usr LIBDIR=/usr/lib && \
+    make install-static PREFIX=/usr LIBDIR=/usr/lib && \
+    rm -rf /tmp/rocksdb
+
+
+#ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.0.0/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.x86_64.a
+#RUN sha256sum /lib/libwasmvm_muslc.x86_64.a | grep f6282df732a13dec836cda1f399dd874b1e3163504dbd9607c6af915b2740479 && \
+#    cp /lib/libwasmvm_muslc.x86_64.a /lib/libwasmvm_muslc.a
+
+ADD https://github.com/CosmWasm/wasmvm/releases/download/v1.0.0/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.aarch64.a
+RUN sha256sum /lib/libwasmvm_muslc.aarch64.a | grep 7d2239e9f25e96d0d4daba982ce92367aacf0cbd95d2facb8442268f2b1cc1fc && \
+    cp /lib/libwasmvm_muslc.aarch64.a /lib/libwasmvm_muslc.a
