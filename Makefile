@@ -99,25 +99,25 @@ endif
 build_tags += $(BUILD_TAGS)
 build_tags := $(strip $(build_tags))
 
-ldflags = -X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.Version=$(Version) \
-	-X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.Name=$(Name) \
-  -X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.ServerName=$(ServerName) \
-  -X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.ClientName=$(ClientName) \
-  -X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.Commit=$(COMMIT) \
-  -X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.CosmosSDK=$(CosmosSDK) \
-  -X $(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.Tendermint=$(Tendermint) \
-  -X "$(GithubTop)/FiboChain/fbc/libs/cosmos-sdk/version.BuildTags=$(build_tags)" \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_GENESIS_HEIGHT=$(GenesisHeight) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_MERCURY_HEIGHT=$(MercuryHeight) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_VENUS_HEIGHT=$(VenusHeight) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_VENUS1_HEIGHT=$(Venus1Height) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_VENUS2_HEIGHT=$(Venus2Height) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_VENUS3_HEIGHT=$(Venus3Height) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_VENUS4_HEIGHT=$(Venus4Height) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_VENUS5_HEIGHT=$(Venus5Height) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_EARTH_HEIGHT=$(EarthHeight) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_MARS_HEIGHT=$(MarsHeight) \
-  -X $(GithubTop)/FiboChain/fbc/libs/tendermint/types.MILESTONE_Jupiter_HEIGHT=$(JupiterHeight)
+ldflags = -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.Version=$(Version) \
+	-X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.Name=$(Name) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.ServerName=$(ServerName) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.ClientName=$(ClientName) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.Commit=$(COMMIT) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.CosmosSDK=$(CosmosSDK) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.Tendermint=$(Tendermint) \
+  -X "$(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.BuildTags=$(build_tags)" \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_GENESIS_HEIGHT=$(GenesisHeight) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_MERCURY_HEIGHT=$(MercuryHeight) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS_HEIGHT=$(VenusHeight) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS1_HEIGHT=$(Venus1Height) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS2_HEIGHT=$(Venus2Height) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS3_HEIGHT=$(Venus3Height) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS4_HEIGHT=$(Venus4Height) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS5_HEIGHT=$(Venus5Height) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_EARTH_HEIGHT=$(EarthHeight) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_MARS_HEIGHT=$(MarsHeight) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_Jupiter_HEIGHT=$(JupiterHeight)
 
 ifeq ($(WITH_ROCKSDB),true)
   ldflags += -X github.com/fibonacci-chain/fbc/libs/tendermint/types.DBBackend=rocksdb
