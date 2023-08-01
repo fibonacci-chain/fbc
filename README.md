@@ -64,6 +64,38 @@ fbchaind start \
     
 ```
 
+##### run a node quickly with snapshot
+```shell
+make mainnet WITH_ROCKSDB=true
+
+fbchaind init adfi-node --chain-id fbc-1230 
+
+wget https://fibochain.s3-ap-east-1.amazonaws.com/0/yd6uOpEDQ3rhlrz1e74CN2agP_genesis.json & mv yd6uOpEDQ3rhlrz1e74CN2agP_genesis.json ~/.fbchaind/config/genesis.json 
+
+fbchaind unsafe-reset-all
+
+wget https://mirrorcnamdin.oss-cn-hangzhou.aliyuncs.com/fbchain/data/2023-08-01_rocketdb_snapshot.tar.gz
+
+mv 2023-08-01_rocketdb_snapshot.tar.gz ~/.fbchaind/data/
+
+cd ~/.fbchaind/data/
+
+tar -zxvf 2023-08-01_rocketdb_snapshot.tar.gz
+
+fbchaind start \
+    --chain-id fbc-1230 \
+    --unsafe-cors=true \
+    --rest.laddr tcp://0.0.0.0:8545 \
+    --log_level main:info,iavl:info,*:error,tx-receiver:info \
+    --node-mode val \
+    --fast-query=true \
+    --minimum-gas-prices 0.0000001fibo \
+    --p2p.seeds=5e05489a5ff1d61c8931ee2b7b35ef2a2ddb6e0f@43.198.41.15:26656,8eac34c53d16279fb2b7cfc7f7c99b8e4cfac876@18.167.177.52:26656 \
+    --p2p.addr_book_strict=false \
+    --db_backend rocksdb 
+    
+```
+
 ##### run a node env options
 ```shell
 
