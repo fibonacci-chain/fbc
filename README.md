@@ -61,7 +61,7 @@ fbchaind start \
     --p2p.seeds=5e05489a5ff1d61c8931ee2b7b35ef2a2ddb6e0f@43.198.41.15:26656,8eac34c53d16279fb2b7cfc7f7c99b8e4cfac876@18.167.177.52:26656 \
     --p2p.addr_book_strict=false \
     --db_backend rocksdb 
-
+    
 ```
 
 ##### run a node env options
