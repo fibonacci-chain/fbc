@@ -306,6 +306,7 @@ func NewFBChainApp(
 		"EarthHeight", tmtypes.GetEarthHeight(),
 		"MarsHeight", tmtypes.GetMarsHeight(),
 		"JupiterHeight", tmtypes.GetJupiterHeight(),
+		"CometHeight", tmtypes.GetCometHeight(),
 	)
 	onceLog.Do(func() {
 		iavl.SetLogger(logger.With("module", "iavl"))

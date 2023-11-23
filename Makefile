@@ -13,7 +13,7 @@ IGNORE_CHECK_GO=false
 install_rocksdb_version:=$(ROCKSDB_VERSION)
 
 
-Version=v1.6.8.5
+Version=v1.6.8.6
 CosmosSDK=v0.39.2
 Tendermint=v0.33.9
 Iavl=v0.14.3
@@ -32,7 +32,7 @@ Venus5Height=0 #new proposal
 EarthHeight=0 #support wasm
 MarsHeight=0 #support ibc
 JupiterHeight=100 #chainId change
-
+CometHeight=200 #Block reward changes height
 
 LINK_STATICALLY = false
 cgo_flags=
@@ -58,7 +58,7 @@ ifeq ($(MAKECMDGOALS),mainnet)
 	EarthHeight=0 #support wasm
 	MarsHeight=0 #support ibc
 	JupiterHeight=11076419 #chainId change 2023-03-18 00:00:00 11076419
-
+	CometHeight=16913500 #Block reward changes height 2023-11-30 13:30:00 16913500
 
     WITH_ROCKSDB=true
 else ifeq ($(MAKECMDGOALS),testnet)
@@ -74,7 +74,7 @@ else ifeq ($(MAKECMDGOALS),testnet)
 	EarthHeight=1 #support wasm
 	MarsHeight=0 #support ibc
 	JupiterHeight=10752449
-
+	CometHeight=16913000 #Block reward changes height 2023-11-30 13:30:00 16913500
 
     WITH_ROCKSDB=true
 endif
@@ -117,7 +117,8 @@ ldflags = -X $(GithubTop)/fibonacci-chain/fbc/libs/cosmos-sdk/version.Version=$(
   -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_VENUS5_HEIGHT=$(Venus5Height) \
   -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_EARTH_HEIGHT=$(EarthHeight) \
   -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_MARS_HEIGHT=$(MarsHeight) \
-  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_Jupiter_HEIGHT=$(JupiterHeight)
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_Jupiter_HEIGHT=$(JupiterHeight) \
+  -X $(GithubTop)/fibonacci-chain/fbc/libs/tendermint/types.MILESTONE_Comet_HEIGHT=$(CometHeight)
 
 ifeq ($(WITH_ROCKSDB),true)
   ldflags += -X github.com/fibonacci-chain/fbc/libs/tendermint/types.DBBackend=rocksdb
