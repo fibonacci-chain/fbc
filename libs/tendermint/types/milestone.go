@@ -45,6 +45,9 @@ var (
 	MILESTONE_Jupiter_HEIGHT string
 	milestoneJupiterHeight   int64
 
+	MILESTONE_Comet_HEIGHT string
+	milestoneCometHeight   int64
+
 	// note: it stores the earlies height of the node,and it is used by cli
 	nodePruneHeight int64
 
@@ -59,6 +62,9 @@ const (
 const (
 	MainNetJupiter1Height = 10762449
 	TestNetJupiterHeight  = 10761449
+
+	MainNetCometHeight = 16911860
+	TestNetCometHeight = 16911860
 
 	MainNetVeneus1Height = 12988000
 	TestNetVeneus1Height = 12067000
@@ -89,6 +95,7 @@ func init() {
 		milestoneVenus4Height = string2number(MILESTONE_VENUS4_HEIGHT)
 		milestoneVenus5Height = string2number(MILESTONE_VENUS5_HEIGHT)
 		milestoneJupiterHeight = string2number(MILESTONE_Jupiter_HEIGHT)
+		milestoneCometHeight = string2number(MILESTONE_Comet_HEIGHT)
 	})
 }
 
@@ -110,6 +117,7 @@ func SetupMainNetEnvironment(pruneH int64) {
 	nodePruneHeight = pruneH
 	milestoneVenus1Height = MainNetVeneus1Height
 	milestoneJupiterHeight = MainNetJupiter1Height
+	milestoneCometHeight = MainNetCometHeight
 }
 
 func SetupTestNetEnvironment(pruneH int64) {
@@ -119,6 +127,7 @@ func SetupTestNetEnvironment(pruneH int64) {
 	nodePruneHeight = pruneH
 	milestoneVenus1Height = TestNetVeneus1Height
 	milestoneJupiterHeight = TestNetJupiterHeight
+	milestoneCometHeight = TestNetCometHeight
 }
 
 // depracate homstead signer support
@@ -325,4 +334,21 @@ func UnittestOnlySetMilestoneJupiterHeight(h int64) {
 
 func GetJupiterHeight() int64 {
 	return milestoneJupiterHeight
+}
+
+// =============== ===============
+// =========== Comet ===============
+func HigherThanComet(height int64) bool {
+	if milestoneCometHeight == 0 {
+		return false
+	}
+	return height >= milestoneCometHeight
+}
+
+func UnittestOnlySetMilestoneCometHeight(h int64) {
+	milestoneJupiterHeight = h
+}
+
+func GetCometHeight() int64 {
+	return milestoneCometHeight
 }

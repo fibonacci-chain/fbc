@@ -70,6 +70,36 @@ func (k Keeper) UpdateMinterCustomToRightJupiter(ctx sdk.Context, minter *types.
 	k.SetMinterCustom(ctx, *minter)
 }
 
+// UpdateMinterCustomToRightComet occur 2023.11.30
+func (k Keeper) UpdateMinterCustomToRightComet(ctx sdk.Context, minter *types.MinterCustom, params types.Params) {
+	//update param to right
+	params.DeflationEpoch = types.FiboChainDeflationEpoch
+	params.DeflationRate = types.FiboChainDeflationRate
+	params.BlocksPerYear = uint64(8298947)
+
+	firstYearPerBlock := sdk.MustNewDecFromStr("1.584122660380889") //first year mint per block
+
+	minter.MintedPerBlock = sdk.NewDecCoinsFromDec(params.MintDenom, firstYearPerBlock)
+
+	var provisionAmtPerBlock sdk.Dec
+	if ctx.BlockHeight() == 0 || minter.NextBlockToUpdate == 0 {
+		provisionAmtPerBlock = k.GetOriginalMintedPerBlock()
+	} else {
+		provisionAmtPerBlock = minter.MintedPerBlock.AmountOf(params.MintDenom).Mul(params.DeflationRate)
+	}
+
+	// update new MinterCustom
+	minter.MintedPerBlock = sdk.NewDecCoinsFromDec(params.MintDenom, provisionAmtPerBlock)
+	/*
+	* Calculated based on 3.8s per block, the number of blocks produced per year is 8298947, so after that, 8298947 blocks will be produced per year;
+	* 63 days after equalizing, around February 2, 2024, production will be reduced;
+	 */
+	minter.NextBlockToUpdate = uint64(ctx.BlockHeight() + 1433000) //uint64(63*24*3600/3.8)
+
+	k.SetParams(ctx, params)
+	k.SetMinterCustom(ctx, *minter)
+}
+
 // UpdateMinterCustom every year deflation rate 20%, assume year blockNumber 10519200
 // total mint:  7777_7777 - 1200_0000 = 65777777
 // 2022 1year: 65777777 * 0.2 = 13155555.4 / 10519200 = 1.2506231842725684

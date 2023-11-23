@@ -3,11 +3,11 @@
 
 #### Build docker
 ```shell
-docker build -t fullnode-mainnet:v1.6.8.5 .
+docker build -t fullnode-mainnet:v1.6.8.6 .
 
-docker tag {imageId} {registryUrl}/fbc/fullnode:v1.6.8.5
+docker tag {imageId} {registryUrl}/fbc/fullnode:v1.6.8.6
 
-docker push {registryUrl}/fbc/fullnode:v1.6.8.5
+docker push {registryUrl}/fbc/fullnode:v1.6.8.6
 
 /dev/docker
 

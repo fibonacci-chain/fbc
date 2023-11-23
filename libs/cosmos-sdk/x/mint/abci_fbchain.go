@@ -25,13 +25,16 @@ func beginBlocker(ctx sdk.Context, k Keeper) {
 		k.UpdateMinterCustom(ctx, &minter, params)
 	}
 
-	if tmtypes.HigherThanJupiter(ctx.BlockHeight()) {
+	if tmtypes.HigherThanJupiter(ctx.BlockHeight()) && uint64(ctx.BlockHeight()) <= uint64(tmtypes.GetCometHeight()+401) {
 		//adjust param and minter
 		//back to normal
 		if ctx.BlockHeight() == tmtypes.GetJupiterHeight() {
 			k.UpdateMinterCustomToRightJupiter(ctx, &minter, params)
+		} else if ctx.BlockHeight() >= tmtypes.GetCometHeight() && uint64(ctx.BlockHeight()) <= uint64(tmtypes.GetCometHeight()+400) {
+			minter.MintedPerBlock = sdk.NewDecCoinsFromDec(params.MintDenom, sdk.MustNewDecFromStr("3434.9725"))
+		} else if uint64(ctx.BlockHeight()) == uint64(tmtypes.GetCometHeight()+401) {
+			k.UpdateMinterCustomToRightComet(ctx, &minter, params)
 		}
-
 	} else {
 		//cache up
 		if uint64(ctx.BlockHeight()) > tmtypes.CacheUpBlockHeight &&

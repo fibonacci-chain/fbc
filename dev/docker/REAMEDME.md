@@ -14,9 +14,9 @@ docker push registry.cn-hongkong.aliyuncs.com/fbc/build-env-x86:lastest
 
 git https://github.com/fibonacci-chain/fbc/fbc.git
 cd ./fbc
-git checkout v1.6.8.5
+git checkout v1.6.8.6
 cd ..
-docker build -t fullnode-mainnet:v1.6.8.5 .
+docker build -t fullnode-mainnet:v1.6.8.6 .
 
 
 docker login --username=zjf@1633522246959130 registry.cn-hongkong.aliyuncs.com
